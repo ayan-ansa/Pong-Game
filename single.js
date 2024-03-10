@@ -93,6 +93,9 @@ let movePaddle = (e) => {
 };
 canvas.addEventListener("mousemove", movePaddle);
 
+
+
+
 let handleCollision = (b, p) => {
   b.top = b.y - b.radius;
   b.bottom = b.y + b.radius;
@@ -119,18 +122,24 @@ let gameOver = () => {
   document.querySelector(".result").style.display = "block";
 };
 function update() {
+
+ // move the comp paddle
+
+ let computerLevel = 0.1;
+ comp.x += ball.x - (comp.x + comp.width / 2) + computerLevel;
+ if (ball.speed > 2) {
+   comp.x += ball.x + 100;
+ }
+
   ball.x += ball.velocityX * ball.speed;
   ball.y += ball.velocityY * ball.speed;
-  // move the comp paddle
-  let computerLevel = 0.1;
-  comp.x += ball.x - (comp.x + comp.width / 2) + computerLevel;
-  if (ball.speed > 2) {
-    comp.x += ball.x + 100;
-  }
+
   // reflect from wall
   if (ball.x + ball.radius > width || ball.x - ball.radius < 0) {
     ball.velocityX = -ball.velocityX;
   }
+
+ 
   // if collision happens
   let player = ball.y < canvas.height / 2 ? comp : user;
   if (handleCollision(ball, player)) {
@@ -144,9 +153,9 @@ function update() {
     comp.score++;
     resetBall();
   }
-  if (user.score > 4||comp.score>4) {
+  if (user.score > 4 || comp.score > 4) {
     clearInterval(setIntervalId);
-    gameOver()
+    gameOver();
   }
 }
 
